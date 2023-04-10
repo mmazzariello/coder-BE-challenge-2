@@ -26,9 +26,18 @@ class ProductManager {
         return;
       } else {
         product.id = this.products.length + 1;
-        this.products.push(product);
 
         await fs.writeFile(this.path, JSON.stringify(this.products));
+        const content = await fs.readFile(this.path, "utf-8"); //Consulto el array
+
+        const aux = JSON.parse(content);
+        aux.push(product1);
+
+        //Siempre voy a tener que reemplazar
+        await fs.writeFile(this.path, JSON.stringify(aux));
+
+        aux.push(product2);
+        await fs.writeFile(this.path, JSON.stringify(aux));
 
         console.log("Product added successfully");
       }
@@ -95,49 +104,49 @@ const product2 = new Product(
   "aab125",
   20
 );
-const product3 = new Product(
-  "Product 3",
-  "Description 3",
-  30,
-  "thumbnail2.png",
-  "aac125",
-  30
-);
+// const product3 = new Product(
+//   "Product 3",
+//   "Description 3",
+//   30,
+//   "thumbnail2.png",
+//   "aac125",
+//   30
+// );
 
-const product4 = new Product(
-  "Product 4",
-  "",
-  40,
-  "thumbnail4.png",
-  "aaa123",
-  40
-);
+// const product4 = new Product(
+//   "Product 4",
+//   "",
+//   40,
+//   "thumbnail4.png",
+//   "aaa123",
+//   40
+// );
 
-const product5 = new Product(
-  "Product 5",
-  "Description 5",
-  50,
-  "thumbnail5.png",
-  "aab123",
-  50
-);
+// const product5 = new Product(
+//   "Product 5",
+//   "Description 5",
+//   50,
+//   "thumbnail5.png",
+//   "aab123",
+//   50
+// );
 
-const product6 = new Product(
-  "Product 6",
-  "Description 6",
-  60,
-  "thumbnail6.png",
-  "aab123",
-  60
-);
+// const product6 = new Product(
+//   "Product 6",
+//   "Description 6",
+//   60,
+//   "thumbnail6.png",
+//   "aab123",
+//   60
+// );
 
 const productManager = new ProductManager("./info.txt");
 await productManager.addProduct(product1);
-await productManager.addProduct(product2);
-await productManager.addProduct(product3);
-await productManager.addProduct(product4); //Se generará error por tener un campo vacío
-await productManager.addProduct(product5);
-await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
+// await productManager.addProduct(product2);
+// await productManager.addProduct(product3);
+// await productManager.addProduct(product4); //Se generará error por tener un campo vacío
+// await productManager.addProduct(product5);
+// await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
 // const productIdToFind = 3;
 // const productById = productManager.getProductById(productIdToFind);
