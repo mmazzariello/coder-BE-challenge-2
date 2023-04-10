@@ -6,15 +6,6 @@ class ProductManager {
     this.products = [];
   }
 
-  //   static incrementId() {
-  //     if (this.idIncrement) {
-  //       this.idIncrement++;
-  //     } else {
-  //       this.idIncrement = 1;
-  //     }
-  //     return this.idIncrement;
-  //   }
-
   async addProduct(product) {
     if (
       !product.title ||
@@ -34,7 +25,7 @@ class ProductManager {
         console.error("Product code is already in use");
         return;
       } else {
-        product.id = this.products.length + 1;
+        // product.id = this.products.length + 1;
 
         const content = await fs.readFile(this.path, "utf-8");
 
@@ -86,7 +77,7 @@ class ProductManager {
       prodsParse[index].stock = stock;
 
       await fs.writeFile(this.path, JSON.stringify(prodsParse));
-      return "Product updated";
+      return "Product updated successfully";
     } else {
       return "Product not found";
     }
@@ -120,6 +111,16 @@ class Product {
     this.thumbnail = thumbnail;
     this.code = code;
     this.stock = stock;
+    this.id = Product.incrementID();
+  }
+
+  static incrementID() {
+    if (this.idIncrement) {
+      this.idIncrement++;
+    } else {
+      this.idIncrement = 1;
+    }
+    return this.idIncrement;
   }
 }
 
@@ -193,17 +194,15 @@ productManager.getProducts().then((prods) => console.log("getProducts", prods));
 productManager
   .updateProduct(
     {
-      title: "title 2",
-      description: "new description 2",
+      title: "Title 1",
+      description: "New description 1",
       price: 9,
-      thumbnail: "thumbnail6.png",
-      code: "abc123",
-      stock: 4,
+      thumbnail: "thumbnail1.png",
+      code: "abc111",
+      stock: 1,
     },
-    2
+    1
   )
-  .then((prod) => console.log("Product updated success", prod));
+  .then((prod) => console.log(prod));
 
-productManager
-  .deleteProduct(3)
-  .then((prod) => console.log("deleteProduct", prod));
+productManager.deleteProduct(3).then((prod) => console.log(prod));
