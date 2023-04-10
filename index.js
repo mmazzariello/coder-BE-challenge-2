@@ -174,6 +174,7 @@ const product6 = new Product(
   60
 );
 
+//ADD PRODUCTS
 const productManager = new ProductManager("./info.txt");
 await productManager.addProduct(product1);
 await productManager.addProduct(product2);
@@ -182,13 +183,16 @@ await productManager.addProduct(product4); //Se generará error por tener un cam
 await productManager.addProduct(product5);
 await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
+//FIND A PRODUCT
 const productIdToFind = 2;
 productManager.getProductById(productIdToFind).then((prod) => {
   console.log("getProductById", prod);
 });
 
+//GET ALL PRODUCTS
 productManager.getProducts().then((prods) => console.log("getProducts", prods));
 
+//UPDATE SPECIFIC PRODUCT
 productManager
   .updateProduct(
     {
@@ -199,8 +203,9 @@ productManager
       code: "abc111",
       stock: 1,
     },
-    6
+    1
   )
   .then((prod) => console.log(prod));
 
+//DELETE SPECIFIC PRODUCT
 productManager.deleteProduct(1).then((prod) => console.log(prod));
