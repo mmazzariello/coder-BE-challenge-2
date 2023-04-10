@@ -63,6 +63,7 @@ class ProductManager {
     const productsArr = await fs.readFile(this.path, "utf-8");
     const productToFind = JSON.parse(productsArr);
     if (productToFind.some((prod) => prod.id === parseInt(id))) {
+      console.log(`Product with id: ${id} found`);
       return productToFind.find((prod) => prod.id === parseInt(id));
     } else {
       console.error("Product not found");
@@ -164,13 +165,13 @@ await productManager.addProduct(product4); //Se generará error por tener un cam
 await productManager.addProduct(product5);
 await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
-// const productIdToFind = 1;
-// productManager.getProductById(productIdToFind).then((prod) => {
-//   console.log("getProductById", prod);
-// });
+const productIdToFind = 2;
+productManager.getProductById(productIdToFind).then((prod) => {
+  console.log("getProductById", prod);
+});
 
-productManager.getProducts().then((prods) => console.log("getProducts", prods));
+// productManager.getProducts().then((prods) => console.log("getProducts", prods));
 
-productManager
-  .deleteProduct(1)
-  .then((prod) => console.log("deleteProduct", prod));
+// productManager
+//   .deleteProduct(1)
+//   .then((prod) => console.log("deleteProduct", prod));
