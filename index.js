@@ -70,8 +70,27 @@ class ProductManager {
     }
   }
 
-  updateProduct() {
-    console.log("update");
+  async updateProduct(
+    id,
+    { title, description, price, thumbnail, code, stock }
+  ) {
+    const prodsJson = await fs.readFile(this.path, "utf-8");
+    const prodsParse = JSON.parse(prodsJson);
+
+    if (prodsParse.some((prod) => prod.id === parseInt(id))) {
+      let index = prodsParse.findIndex((prod) => prod.id === parseInt(id));
+      prodsParse[index].title = title;
+      prodsParse[index].description = description;
+      prodsParse[index].price = price;
+      prodsParse[index].thumbnail = thumbnail;
+      prodsParse[index].code = code;
+      prodsParse[index].stock = stock;
+
+      await fs.writeFile(this.path, JSON.stringify(prodsParse));
+      return "Product updated";
+    } else {
+      return "Product not found";
+    }
   }
 
   async deleteProduct(id) {
@@ -165,12 +184,23 @@ await productManager.addProduct(product4); //Se generará error por tener un cam
 await productManager.addProduct(product5);
 await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
-const productIdToFind = 2;
-productManager.getProductById(productIdToFind).then((prod) => {
-  console.log("getProductById", prod);
-});
+// const productIdToFind = 2;
+// productManager.getProductById(productIdToFind).then((prod) => {
+//   console.log("getProductById", prod);
+// });
 
 // productManager.getProducts().then((prods) => console.log("getProducts", prods));
+
+productManager
+  .updateProduct(2, {
+    title: "title",
+    description: "new description",
+    price: 9,
+    thumbnail: "thumbnail6.png",
+    code: "abc123",
+    stock: 4,
+  })
+  .then((prod) => console.log("Product updated success", prod));
 
 // productManager
 //   .deleteProduct(1)
