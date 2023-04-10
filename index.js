@@ -57,7 +57,6 @@ class ProductManager {
     return products;
   }
 
-  //   Aca utilizar el write file, no el append file
   async getProductById(id) {
     //Consulto
     const productsArr = await fs.readFile(this.path, "utf-8");
@@ -71,8 +70,8 @@ class ProductManager {
   }
 
   async updateProduct(
-    id,
-    { title, description, price, thumbnail, code, stock }
+    { title, description, price, thumbnail, code, stock },
+    id
   ) {
     const prodsJson = await fs.readFile(this.path, "utf-8");
     const prodsParse = JSON.parse(prodsJson);
@@ -184,24 +183,27 @@ await productManager.addProduct(product4); //Se generará error por tener un cam
 await productManager.addProduct(product5);
 await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
-// const productIdToFind = 2;
-// productManager.getProductById(productIdToFind).then((prod) => {
-//   console.log("getProductById", prod);
-// });
+const productIdToFind = 2;
+productManager.getProductById(productIdToFind).then((prod) => {
+  console.log("getProductById", prod);
+});
 
-// productManager.getProducts().then((prods) => console.log("getProducts", prods));
+productManager.getProducts().then((prods) => console.log("getProducts", prods));
 
 productManager
-  .updateProduct(2, {
-    title: "title",
-    description: "new description",
-    price: 9,
-    thumbnail: "thumbnail6.png",
-    code: "abc123",
-    stock: 4,
-  })
+  .updateProduct(
+    {
+      title: "title 2",
+      description: "new description 2",
+      price: 9,
+      thumbnail: "thumbnail6.png",
+      code: "abc123",
+      stock: 4,
+    },
+    2
+  )
   .then((prod) => console.log("Product updated success", prod));
 
-// productManager
-//   .deleteProduct(1)
-//   .then((prod) => console.log("deleteProduct", prod));
+productManager
+  .deleteProduct(3)
+  .then((prod) => console.log("deleteProduct", prod));
