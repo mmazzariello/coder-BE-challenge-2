@@ -6,6 +6,15 @@ class ProductManager {
     this.products = [];
   }
 
+  //   static incrementId() {
+  //     if (this.idIncrement) {
+  //       this.idIncrement++;
+  //     } else {
+  //       this.idIncrement = 1;
+  //     }
+  //     return this.idIncrement;
+  //   }
+
   async addProduct(product) {
     if (
       !product.title ||
@@ -50,13 +59,11 @@ class ProductManager {
 
   //   Aca utilizar el write file, no el append file
   async getProductById(id) {
-    const product = this.products.find((product) => product.id === id);
-    if (product) {
-      //Consulto
-      const productsArr = await fs.readFile(this.path, "utf-8");
-      const productToFind = JSON.parse(productsArr);
-
-      return productToFind;
+    //Consulto
+    const productsArr = await fs.readFile(this.path, "utf-8");
+    const productToFind = JSON.parse(productsArr);
+    if (productToFind.some((prod) => prod.id === parseInt(id))) {
+      return productToFind.find((prod) => prod.id === parseInt(id));
     } else {
       console.error("Product not found");
     }
@@ -66,15 +73,24 @@ class ProductManager {
     console.log("update");
   }
 
-  //   deleteProduct(id) {
-  //     const product = this.products.find((product) => product.id === id);
-  //     console.log("delete");
+  async deleteProduct(id) {
+    const productsArr = await fs.readFile(this.path, "utf-8");
+    const products = JSON.parse(productsArr);
 
-  //     fs.unlink(this.path, (err) => {
-  //       if (err) throw err;
-  //       console.log(`Product with ID ${id} has been deleted`);
-  //     });
-  //   }
+    if (products.some((prod) => prod.id === parseInt(id))) {
+      // Remuevo el producto con el id específico aplicando filter
+      const filteredProducts = products.filter(
+        (prod) => prod.id !== parseInt(id)
+      );
+
+      // Escribo el contenido en el archivo
+      await fs.writeFile(this.path, JSON.stringify(filteredProducts));
+
+      return "Product removed successfully.";
+    } else {
+      return "Product not found.";
+    }
+  }
 }
 
 class Product {
@@ -153,8 +169,8 @@ await productManager.addProduct(product6); // Se generará error por tener el ca
 //   console.log("getProductById", prod);
 // });
 
-// productManager.getProducts().then((prods) => console.log("getProducts", prods));
+productManager.getProducts().then((prods) => console.log("getProducts", prods));
 
-// console.log("delete", productManager.deleteProduct(1));
-
-//TODO: HACER DINAMICO EL ADD PRODUCT
+productManager
+  .deleteProduct(1)
+  .then((prod) => console.log("deleteProduct", prod));
