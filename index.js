@@ -27,18 +27,12 @@ class ProductManager {
       } else {
         product.id = this.products.length + 1;
 
-        await fs.writeFile(this.path, JSON.stringify(this.products));
-        const content = await fs.readFile(this.path, "utf-8"); //Consulto el array
+        const content = await fs.readFile(this.path, "utf-8");
 
         const aux = JSON.parse(content);
-        aux.push(product1);
+        aux.push(product);
 
-        //Siempre voy a tener que reemplazar
         await fs.writeFile(this.path, JSON.stringify(aux));
-
-        aux.push(product2);
-        await fs.writeFile(this.path, JSON.stringify(aux));
-
         console.log("Product added successfully");
       }
     } catch (error) {
@@ -47,24 +41,30 @@ class ProductManager {
   }
 
   async getProducts() {
+    //Consulto
     const productsArr = await fs.readFile(this.path, "utf-8");
+    //Paso a formato json
     const products = JSON.parse(productsArr);
     return products;
   }
 
-  //Aca utilizar el write file, no el append file
-  //   getProductById(id) {
-  //     const product = this.products.find((product) => product.id === id);
-  //     if (product) {
-  //       return product;
-  //     } else {
-  //       console.error("Product not found");
-  //     }
-  //   }
+  //   Aca utilizar el write file, no el append file
+  async getProductById(id) {
+    const product = this.products.find((product) => product.id === id);
+    if (product) {
+      //Consulto
+      const productsArr = await fs.readFile(this.path, "utf-8");
+      const productToFind = JSON.parse(productsArr);
 
-  //   updateProduct() {
-  //     console.log("update");
-  //   }
+      return productToFind;
+    } else {
+      console.error("Product not found");
+    }
+  }
+
+  updateProduct() {
+    console.log("update");
+  }
 
   //   deleteProduct(id) {
   //     const product = this.products.find((product) => product.id === id);
@@ -104,53 +104,57 @@ const product2 = new Product(
   "aab125",
   20
 );
-// const product3 = new Product(
-//   "Product 3",
-//   "Description 3",
-//   30,
-//   "thumbnail2.png",
-//   "aac125",
-//   30
-// );
+const product3 = new Product(
+  "Product 3",
+  "Description 3",
+  30,
+  "thumbnail2.png",
+  "aac125",
+  30
+);
 
-// const product4 = new Product(
-//   "Product 4",
-//   "",
-//   40,
-//   "thumbnail4.png",
-//   "aaa123",
-//   40
-// );
+const product4 = new Product(
+  "Product 4",
+  "",
+  40,
+  "thumbnail4.png",
+  "aaa123",
+  40
+);
 
-// const product5 = new Product(
-//   "Product 5",
-//   "Description 5",
-//   50,
-//   "thumbnail5.png",
-//   "aab123",
-//   50
-// );
+const product5 = new Product(
+  "Product 5",
+  "Description 5",
+  50,
+  "thumbnail5.png",
+  "aab123",
+  50
+);
 
-// const product6 = new Product(
-//   "Product 6",
-//   "Description 6",
-//   60,
-//   "thumbnail6.png",
-//   "aab123",
-//   60
-// );
+const product6 = new Product(
+  "Product 6",
+  "Description 6",
+  60,
+  "thumbnail6.png",
+  "aab123",
+  60
+);
 
 const productManager = new ProductManager("./info.txt");
 await productManager.addProduct(product1);
-// await productManager.addProduct(product2);
-// await productManager.addProduct(product3);
-// await productManager.addProduct(product4); //Se generará error por tener un campo vacío
-// await productManager.addProduct(product5);
-// await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
+await productManager.addProduct(product2);
+await productManager.addProduct(product3);
+await productManager.addProduct(product4); //Se generará error por tener un campo vacío
+await productManager.addProduct(product5);
+await productManager.addProduct(product6); // Se generará error por tener el campo code duplicado
 
-// const productIdToFind = 3;
-// const productById = productManager.getProductById(productIdToFind);
-// console.log("productById", productById);
+// const productIdToFind = 1;
+// productManager.getProductById(productIdToFind).then((prod) => {
+//   console.log("getProductById", prod);
+// });
 
-// console.log("productsArray", productManager.products);
-// console.log("getProducts", productManager.getProducts());
+// productManager.getProducts().then((prods) => console.log("getProducts", prods));
+
+// console.log("delete", productManager.deleteProduct(1));
+
+//TODO: HACER DINAMICO EL ADD PRODUCT
