@@ -25,8 +25,6 @@ class ProductManager {
         console.error("Product code is already in use");
         return;
       } else {
-        // product.id = this.products.length + 1;
-
         const content = await fs.readFile(this.path, "utf-8");
 
         const aux = JSON.parse(content);
@@ -201,8 +199,8 @@ productManager
       code: "abc111",
       stock: 1,
     },
-    1
+    6
   )
   .then((prod) => console.log(prod));
 
-productManager.deleteProduct(3).then((prod) => console.log(prod));
+productManager.deleteProduct(1).then((prod) => console.log(prod));
